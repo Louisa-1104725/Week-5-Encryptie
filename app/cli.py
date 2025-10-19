@@ -5,7 +5,7 @@ def cryptography_tool():
     f = Fernet(key)
     while True:
         print("Deze tool versleutelt een tekst en kan die weer ontsleutelen.")
-        option = input("Wil je een tekst versleutelen (1), ontsleutelen (2) of stoppen (Q)?")
+        option = input("Wil je een tekst versleutelen (1), ontsleutelen (2) of stoppen (Q)?").lower()
 
         if option == "1":
             plaintext = input("Voer de tekst in die je wilt versleutelen: ")
