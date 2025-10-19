@@ -10,7 +10,12 @@ def cryptography_tool():
     token = f.encrypt(plaintext_encode)
     print("Sleutel:", key)
     print("Token:", token)
-
+    choice = input("Wil je direct weer ontsleutelen? (j/n): ").lower()
+    if choice == "j":
+        decrypted: bytes = f.decrypt(token)
+        text = decrypted.decode("utf-8")
+        print("Ontsleutelde tekst:")
+        print(text)
 
 if __name__ == "__main__":
     cryptography_tool()
