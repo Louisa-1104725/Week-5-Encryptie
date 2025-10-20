@@ -2,11 +2,13 @@ import os
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet, InvalidToken
 
+#Genereert een FERNET-KEY
 def key_generator():
     with open(".env", "w") as f:
         f.write(f"FERNET_KEY={Fernet.generate_key().decode()}")
     print("Nieuwe Fernet-sleutel opgeslagen in .env")
     print("Start applicatie handmatig opnieuw op")
+
 
 def cryptography_tool():
     load_dotenv()
