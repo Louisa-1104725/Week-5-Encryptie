@@ -1,6 +1,6 @@
 # Week 5 - Encryptie
 Dit is een encryptie en decryptie applicatie met een commandline interface (CLI).
-Je kan ook een nieuwe sleutel aanmaken.
+Je kan berichten hiermee dus versleutelen en ontsleutelen. Je kan ook een nieuwe sleutel aanmaken.
 
 ### Setup
 1. Klik in PyCharm op **File** en vervolgens **Settings**.
