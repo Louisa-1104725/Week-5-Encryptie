@@ -1,8 +1,20 @@
+import os
+from dotenv import load_dotenv
 from cryptography.fernet import Fernet, InvalidToken
 
 def cryptography_tool():
-    key = Fernet.generate_key()
-    f = Fernet(key)
+    load_dotenv()
+    key = os.getenv('FERNET_KEY')
+    if not key:
+        print('Fernet key niet gevonden, voeg FERNET_KEY toe')
+        return
+
+    try:
+        f = Fernet(key.encode("utf-8"))
+    except (ValueError, TypeError):
+        print ('FERNET_KEY in .env is ongeldig')
+        return
+
     while True:
         print("Deze tool versleutelt een tekst en kan die weer ontsleutelen.")
         option = input("Wil je een tekst versleutelen (1), ontsleutelen (2) of stoppen (Q)?").lower()
@@ -13,52 +25,38 @@ def cryptography_tool():
             #Invoer wordt versleuteld met een fernet-key en weergegeven aan de gebruiker.
             plaintext_encode = plaintext.encode("utf-8")
             token = f.encrypt(plaintext_encode)
-            print("Sleutel:", key)
-            print("Token:", token)
+            print("Sleutel: zie .env voor de sleutel")
+            print("Token:", token.decode())
 
             choice = input("Wil je direct weer ontsleutelen? (j/n): ").lower()
             if choice == "j" or choice == "ja":
                 #Token wordt weer ontsleuteld met de fernet-key.
                 decrypted: bytes = f.decrypt(token)
                 text = decrypted.decode("utf-8")
-                print("Ontsleutelde tekst:")
-                print(text)
+                print(f"Ontsleutelde tekst: {text}")
                 print("-----------------------------------------")
             elif choice == "n" or choice == "nee":
                 continue
 
         elif option == "2":
             print("Je hebt gekozen voor ontsleutelen.")
-            key = input("Plak hier de sleutel: ").strip()
             token = input("Plak hier de token: ").strip()
-
-            #Er wordt gecontroleerd of de fernet-key voldoet aan utf-8.
-            try:
-                f = Fernet(key.encode("utf-8"))
-            #Als het een ongeldige invoer is, wordt de error afgevangen.
-            except (ValueError, TypeError):
-                print("Fout: ongeldig formaat sleutel.")
-                print("-----------------------------------------")
-                continue
 
             #Er wordt gecontroleerd of de token voldoet aan utf-8.
             try:
                 plaintext = f.decrypt(token.encode("utf-8"))
             # Als het een ongeldige invoer is, wordt de error afgevangen.
             except InvalidToken:
-                print("Fout: ongeldige token of verkeerde sleutel.")
+                print("Fout: ongeldige token.")
                 print("-----------------------------------------")
                 continue
 
             #Als alles klopt, wordt het bericht ontsleuteld.
-            try:
-                print(" Ontsleutelde tekst: ")
-                print(plaintext.decode("utf-8"))
-            except UnicodeDecodeError:
-                print("Ontsleutelde bytes: ")
-            print(plaintext)
+            text = plaintext.decode("utf-8")
+            print(f"Ontsleutelde tekst: {text}")
             print("-----------------------------------------")
             continue
+
         elif option == "q":
             break
         else:
